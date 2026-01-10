@@ -79,10 +79,10 @@ public class UsuarioEntity {
     }
 
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<EventoEntity> eventos;
+    private List<DashboardEntity> dashboards;
 
     public UsuarioEntity() {
-        eventos = new ArrayList<>();
+        dashboards = new ArrayList<>();
     }
 
     public UsuarioEntity(String nombre, String email, String apellido1, String apellido2, String password) {
@@ -127,12 +127,10 @@ public class UsuarioEntity {
         this.email = email;
     }
 
-    public List<EventoEntity> getEventos() {
-        return eventos;
+    public int getdashboards() {
+        return dashboards.size();
     }
 
-    public void setEventos(List<EventoEntity> eventos) {
-        this.eventos = eventos;
-    }
+    
 
 }

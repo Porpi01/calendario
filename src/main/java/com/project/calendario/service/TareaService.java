@@ -5,34 +5,34 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.project.calendario.entity.EventoEntity;
+import com.project.calendario.entity.TareaEntity;
 import com.project.calendario.entity.UsuarioEntity;
-import com.project.calendario.repository.EventoRepository;
+import com.project.calendario.repository.TareaRepository;
 import com.project.calendario.repository.UsuarioRepository;
 
 @Service
-public class EventoService {
+public class TareaService {
 
-    private final EventoRepository eventoRepository;
+    private final TareaRepository eventoRepository;
     private final UsuarioRepository usuarioRepository;
 
-    public EventoService(EventoRepository eventoRepository, UsuarioRepository usuarioRepository) {
+    public TareaService(TareaRepository eventoRepository, UsuarioRepository usuarioRepository) {
         this.eventoRepository = eventoRepository;
         this.usuarioRepository = usuarioRepository;
     }
 
     // 🔹 Obtener todos los eventos
-    public List<EventoEntity> getAllEventos() {
+    public List<TareaEntity> getAllEventos() {
         return eventoRepository.findAll();
     }
 
     // 🔹 Obtener evento por id
-    public Optional<EventoEntity> getEventoById(Long id) {
+    public Optional<TareaEntity> getEventoById(Long id) {
         return eventoRepository.findById(id);
     }
 
     // 🔹 Obtener eventos de un usuario
-    public List<EventoEntity> getEventosByUsuario(Long usuarioId) {
+    public List<TareaEntity> getEventosByUsuario(Long usuarioId) {
         UsuarioEntity usuario = usuarioRepository.findById(usuarioId)
             .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
@@ -40,7 +40,7 @@ public class EventoService {
     }
 
     // 🔹 Crear evento para un usuario
-    public EventoEntity createEvento(Long usuarioId, EventoEntity evento) {
+    public TareaEntity createEvento(Long usuarioId, TareaEntity evento) {
         UsuarioEntity usuario = usuarioRepository.findById(usuarioId)
             .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
@@ -49,7 +49,7 @@ public class EventoService {
     }
 
     // 🔹 Actualizar evento
-    public EventoEntity updateEvento(Long id, EventoEntity evento) {
+    public TareaEntity updateEvento(Long id, TareaEntity evento) {
         evento.setId(id);
         return eventoRepository.save(evento);
     }

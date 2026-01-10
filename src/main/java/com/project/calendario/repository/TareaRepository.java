@@ -3,10 +3,10 @@ package com.project.calendario.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.project.calendario.entity.EventoEntity;
+import com.project.calendario.entity.TareaEntity;
 
 @Repository
-public interface EventoRepository extends JpaRepository<EventoEntity, Long> {
+public interface TareaRepository extends JpaRepository<TareaEntity, Long> {
 
 
     
