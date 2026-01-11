@@ -4,35 +4,45 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.project.calendario.entity.UsuarioEntity;
+import com.project.calendario.exception.ResourceNotFoundException;
 import com.project.calendario.repository.UsuarioRepository;
 
 @Service
 public class UsuarioService {
 
     @Autowired
-    UsuarioRepository oUsuarioRepository;
+    private UsuarioRepository usuarioRepository;
 
-    public List<UsuarioEntity> getAllUsuarios() {
-        return oUsuarioRepository.findAll();
+    public UsuarioEntity get(Long id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado: " + id));
     }
 
-    public Optional<UsuarioEntity> getUsuarioById(Long id) {
-        return oUsuarioRepository.findById(id);
+    public Long create(UsuarioEntity usuarioEntity) {
+        usuarioRepository.save(usuarioEntity);
+        return usuarioEntity.getId();
     }
 
-    public UsuarioEntity createUsuario(UsuarioEntity usuario) {
-        return oUsuarioRepository.save(usuario);
+    public UsuarioEntity update(UsuarioEntity usuarioEntity) {
+        get(usuarioEntity.getId()); // valida existencia
+        return usuarioRepository.save(usuarioEntity);
     }
 
-    public UsuarioEntity updateUsuario(Long id, UsuarioEntity usuario) {
-        usuario.setId(id);
-        return oUsuarioRepository.save(usuario);
+    public Long delete(Long id) {
+        usuarioRepository.deleteById(id);
+        return id;
     }
 
-    public void deleteUsuario(Long id) {
-        oUsuarioRepository.deleteById(id);
+    public Page<UsuarioEntity> getPage(Pageable pageable) {
+        return usuarioRepository.findAll(pageable);
+    }
+
+    public Long getTotalUsuarios() {
+        return usuarioRepository.count();
     }
 }

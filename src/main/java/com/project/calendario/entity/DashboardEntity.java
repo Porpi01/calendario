@@ -30,10 +30,15 @@ public class DashboardEntity {
     private UsuarioEntity usuario;
 
     @OneToMany(mappedBy = "dashboard", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TareaEntity> eventos;
+    private List<TareaEntity> tareas;
+
+    public int getTareas() {
+        return tareas.size();
+    }
+
 
     public DashboardEntity() {
-        eventos = new ArrayList<>();
+        tareas = new ArrayList<>();
 
     }
 
@@ -65,12 +70,6 @@ public class DashboardEntity {
         this.usuario = usuario;
     }
 
-    public List<TareaEntity> getEventos() {
-        return eventos;
-    }
-
-    public void setEventos(List<TareaEntity> eventos) {
-        this.eventos = eventos;
-    }
+   
 
 }

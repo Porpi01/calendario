@@ -3,6 +3,9 @@ package com.project.calendario.api;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,52 +13,60 @@ import com.project.calendario.entity.TareaEntity;
 import com.project.calendario.service.TareaService;
 
 @RestController
-@RequestMapping("/eventos")
+@RequestMapping("/tareas")
 public class TareaApi {
 
-    private final TareaService eventoService;
+    @Autowired
+    TareaService oTareaService;
 
-    public TareaApi(TareaService eventoService) {
-        this.eventoService = eventoService;
-    }
-
-    // 🔹 GET /eventos → todos los eventos
-    @GetMapping
-    public List<TareaEntity> getAllEventos() {
-        return eventoService.getAllEventos();
-    }
-
-    // 🔹 GET /eventos/{id} → evento por id
     @GetMapping("/{id}")
-    public ResponseEntity<TareaEntity> getEventoById(@PathVariable Long id) {
-        return eventoService.getEventoById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<TareaEntity> get(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(oTareaService.get(id));
     }
 
-    // 🔹 GET /eventos/usuario/{usuarioId} → eventos de un usuario
-    @GetMapping("/usuario/{usuarioId}")
-    public List<TareaEntity> getEventosByUsuario(@PathVariable Long usuarioId) {
-        return eventoService.getEventosByUsuario(usuarioId);
+    @PostMapping("")
+    public ResponseEntity<Long> create(@RequestBody TareaEntity TareaEntity) {
+        return ResponseEntity.ok(oTareaService.create(TareaEntity));
     }
 
-    // 🔹 POST /eventos/usuario/{usuarioId} → crear evento para usuario
-    @PostMapping("/usuario/{usuarioId}")
-    public TareaEntity createEvento(@PathVariable Long usuarioId, @RequestBody TareaEntity evento) {
-        return eventoService.createEvento(usuarioId, evento);
+    @PutMapping("")
+    public ResponseEntity<TareaEntity> update(@RequestBody TareaEntity TareaEntity) {
+        return ResponseEntity.ok(oTareaService.update(TareaEntity));
     }
 
-    // 🔹 PUT /eventos/{id} → actualizar evento
-    @PutMapping("/{id}")
-    public TareaEntity updateEvento(@PathVariable Long id, @RequestBody TareaEntity evento) {
-        return eventoService.updateEvento(id, evento);
-    }
-
-    // 🔹 DELETE /eventos/{id} → borrar evento
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEvento(@PathVariable Long id) {
-        eventoService.deleteEvento(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Long> delete(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(oTareaService.delete(id));
+    }
+
+    // eventos por dashboard
+    @GetMapping("/dashboard/{dashboardId}")
+    public ResponseEntity<Page<TareaEntity>> getEventosByDashboard(
+            @PathVariable("dashboardId") Long dashboardId,
+            Pageable pageable) {
+        return ResponseEntity.ok(oTareaService.getByDashboard(dashboardId, pageable));
+    }
+
+    // eventos por usuario (a través de dashboards)
+    @GetMapping("/usuario/{usuarioId}")
+    public ResponseEntity<Page<TareaEntity>> getEventosByUsuario(
+            @PathVariable("usuarioId") Long usuarioId,
+            Pageable pageable) {
+        return ResponseEntity.ok(oTareaService.getByUsuario(usuarioId, pageable));
+    }
+
+    // contar eventos de un dashboard
+    @GetMapping("/total/dashboard/{dashboardId}")
+    public ResponseEntity<Long> countEventosByDashboard(@PathVariable Long dashboardId) {
+        return ResponseEntity.ok(oTareaService.countByDashboard(dashboardId));
+    }
+
+    // cambiar estado (to do / doing / done)
+    @PutMapping("/{id}/estado/{estado}")
+    public ResponseEntity<TareaEntity> changeEstado(
+            @PathVariable Long id,
+            @PathVariable Integer estado) {
+        return ResponseEntity.ok(oTareaService.changeEstado(id, estado));
     }
 }
 

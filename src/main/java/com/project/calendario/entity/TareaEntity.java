@@ -39,6 +39,14 @@ public class TareaEntity {
 
     
 
+    public DashboardEntity getDashboard() {
+        return dashboard;
+    }
+
+    public void setDashboard(DashboardEntity dashboard) {
+        this.dashboard = dashboard;
+    }
+
     public TareaEntity() {
     }
 
@@ -100,11 +108,5 @@ public class TareaEntity {
         this.orden = orden;
     }
 
-    public DashboardEntity getdashboard() {
-        return dashboard;
-    }
-
-    public void setdashboard(DashboardEntity dashboard) {
-        this.dashboard = dashboard;
-    }
+    
 }
